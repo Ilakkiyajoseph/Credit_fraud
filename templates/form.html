@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f3f0ff;
+            color: #333;
+        }
+        form {
+            max-width: 800px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 15px;
+            padding: 20px;
+            border: 2px solid #7a3b8a;
+            border-radius: 10px;
+            background-color: #ffffff;
+        }
+        label {
+            grid-column: span 1;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            grid-column: span 1;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+        input[type="submit"] {
+            grid-column: span 4;
+            padding: 10px;
+            background-color: #7a3b8a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #6b327a;
+        }
+        .container {
+            grid-column: span 4;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Fraud Detection Form</h1>
+    <form action="/predict" method="post">
+        <div class="container">
+            <label for="cc_num">Credit Card Number</label>
+            <input type="text" id="cc_num" name="cc_num" required>
+
+            <label for="category">Category</label>
+            <input type="text" id="category" name="category" required>
+
+            <label for="amt">Amount</label>
+            <input type="number" id="amt" name="amt" step="0.01" required>
+
+            <label for="gender">Gender</label>
+            <input type="text" id="gender" name="gender" required>
+
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required>
+
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" required>
+
+            <label for="zip">Zip Code</label>
+            <input type="text" id="zip" name="zip" required>
+
+            <label for="lat">Latitude</label>
+            <input type="number" id="lat" name="lat" step="0.000001" required>
+
+            <label for="long">Longitude</label>
+            <input type="number" id="long" name="long" step="0.000001" required>
+
+            <label for="city_pop">City Population</label>
+            <input type="number" id="city_pop" name="city_pop" required>
+
+            <label for="merch_lat">Merchant Latitude</label>
+            <input type="number" id="merch_lat" name="merch_lat" step="0.000001" required>
+
+            <label for="merch_long">Merchant Longitude</label>
+            <input type="number" id="merch_long" name="merch_long" step="0.000001" required>
+
+            <label for="trans_year">Transaction Year</label>
+            <input type="number" id="trans_year" name="trans_year" required>
+
+            <label for="trans_month">Transaction Month</label>
+            <input type="number" id="trans_month" name="trans_month" required>
+
+            <label for="trans_date">Transaction Date</label>
+            <input type="number" id="trans_date" name="trans_date" required>
+
+            <label for="trans_hour">Transaction Hour</label>
+            <input type="number" id="trans_hour" name="trans_hour" required>
+
+            <label for="trans_min">Transaction Minute</label>
+            <input type="number" id="trans_min" name="trans_min" required>
+
+            <label for="trans_seconds">Transaction Seconds</label>
+            <input type="number" id="trans_seconds" name="trans_seconds" required>
+
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" required>
+
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        // JavaScript to handle form submission and display result
+        document.querySelector('form').onsubmit = async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const formObj = Object.fromEntries(formData.entries());
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formObj)
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerHTML = 'Prediction: ' + (result.prediction ? 'Fraud' : 'Not Fraud');
+        };
+    </script>
+</body>
+</html>
